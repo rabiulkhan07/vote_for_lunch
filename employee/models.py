@@ -9,6 +9,7 @@ class Employee(AbstractUser):
     password = models.CharField(max_length=255)
     presentAddress = models.CharField(max_length=255)
     contactNo = models.CharField(max_length=255)
+    jwt_token = models.TextField(null=True, blank=True)
     
 
     username = None

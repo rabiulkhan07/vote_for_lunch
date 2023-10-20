@@ -53,18 +53,18 @@ class GetSingleData(APIView):
         
 
 class LoginView(APIView):
-    def post(self,request):
+    def post(self, request):
         employeeId = request.data['employeeId']
         password = request.data['password']
 
         user = Employee.objects.filter(employeeId=employeeId).first()
 
-        if user is None :
+        if user is None:
             raise AuthenticationFailed('User not found!')
-        
+
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password!')
-        
+
         payload = {
             'id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
@@ -73,18 +73,20 @@ class LoginView(APIView):
 
         algorithm = 'HS256'
 
+        # Generate the token
         token = jwt.encode(payload, 'secret', algorithm=algorithm)
-        #token = jwt.decode(token, 'secret', algorithms=[algorithm])
 
+        # Save the token to the user's model
+        user.jwt_token = token
+        user.save()
 
         response = Response()
 
-        response.set_cookie(key='jwt',value=token,httponly=True)
+        response.set_cookie(key='jwt', value=token, httponly=True)
 
         response.data = {
-                'jwt' : token
-            }
-        
+            'jwt': token
+        }
 
         return response
     
@@ -106,11 +108,21 @@ class EmployeeView(APIView):
          return Response(serializer.data)
     
 class LogoutView(APIView):
-    def post(self,request):
+    def post(self, request):
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return Response({'message': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
         response = Response()
         response.delete_cookie('jwt')
+
+        # Clear the token from the user's model
+        user = Employee.objects.get(id=request.user.id)
+        user.jwt_token = None
+        user.save()
+
         response.data = {
-            'message':'success'
+            'message': 'success'
         }
 
         return response
