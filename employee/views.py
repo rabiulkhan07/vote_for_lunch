@@ -108,21 +108,11 @@ class EmployeeView(APIView):
          return Response(serializer.data)
     
 class LogoutView(APIView):
-    def post(self, request):
-        # Check if the user is authenticated
-        if not request.user.is_authenticated:
-            return Response({'message': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
-
+    def post(self,request):
         response = Response()
         response.delete_cookie('jwt')
-
-        # Clear the token from the user's model
-        user = Employee.objects.get(id=request.user.id)
-        user.jwt_token = None
-        user.save()
-
         response.data = {
-            'message': 'success'
+            'message':'success'
         }
 
         return response

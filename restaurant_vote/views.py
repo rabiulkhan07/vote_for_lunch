@@ -1,46 +1,50 @@
+
 from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
-from django.utils import timezone
-from .models import Restaurant, Menu, Vote
-from .serializers import RestaurantSerializer, MenuSerializer, VoteSerializer
+from rest_framework.exceptions import AuthenticationFailed
+from .models import Restaurant
+from .serializers import RestaurantSerializer
+import jwt
+from .permissions import IsAuthenticatedWithJWT
 
 class RestaurantCreateView(generics.CreateAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
 
-class MenuCreateView(generics.CreateAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
+    def perform_create(self, serializer):
+        # Get the user from the JWT token stored in the cookie
+        jwt_token = self.request.COOKIES.get('jwt')
+        
+        if jwt_token:
+            try:
+                payload = jwt.decode(jwt_token, 'secret', algorithms=['HS256'])
+                user_id = payload.get('id')
+                
+                # Set the user as the creator of the restaurant
+                serializer.save(created_by_id=user_id)
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed('Unauthenticated')
+        else:
+            raise AuthenticationFailed('Unauthenticated')
 
-class MenuTodayView(generics.RetrieveAPIView):
-    serializer_class = MenuSerializer
-
-    def get_object(self):
-        today = timezone.now().date()
-        menu = Menu.objects.filter(day=today).first()
-        if menu:
-            return menu
-        return None
-
-class VoteCreateView(generics.CreateAPIView):
-    queryset = Vote.objects.all()
-    serializer_class = VoteSerializer
-
-    def create(self, request, *args, **kwargs):
-        request.data['voted_by'] = request.user.id  # Assign the currently authenticated user to voted_by
-        return super().create(request, *args, **kwargs)
-
-class ResultView(generics.ListAPIView):
+#Fetch Resturents
+class RestaurantListView(generics.ListAPIView):
+    queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
 
-    def get_queryset(self):
-        today = timezone.now().date()
-        yesterday = today - timezone.timedelta(days=1)
-        three_days_ago = today - timezone.timedelta(days=3)
-        
-        # Check if a restaurant has won in the past three working days
-        winning_restaurants = Menu.objects.filter(day__range=[three_days_ago, yesterday]).values('restaurant')
-        
-        queryset = Restaurant.objects.exclude(id__in=winning_restaurants)
-        return queryset
+#fetch single 
+class RestaurantDetailView(generics.RetrieveAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+
+#Update
+class RestaurantEditView(generics.UpdateAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+
+#delete
+class RestaurantDeleteView(generics.DestroyAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer

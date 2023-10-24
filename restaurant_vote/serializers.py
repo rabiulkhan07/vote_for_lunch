@@ -1,17 +1,12 @@
 from rest_framework import serializers
-from .models import Restaurant, Menu, Vote
+from .models import Restaurant
 
 class RestaurantSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Restaurant
-        fields = '__all__'
+        fields = ('id', 'name', 'created_by_name')
 
-class MenuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Menu
-        fields = '__all__'
-
-class VoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Vote
-        fields = '__all__'
+    def get_created_by_name(self, obj):
+        return obj.creator_name()

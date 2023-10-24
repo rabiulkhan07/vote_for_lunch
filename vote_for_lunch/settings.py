@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'vote_for_lunch.urls'
 
@@ -79,7 +83,7 @@ WSGI_APPLICATION = 'vote_for_lunch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'b_assessment_v1',
+        'NAME': 'b_assessment',
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
