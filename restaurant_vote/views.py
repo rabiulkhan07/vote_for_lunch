@@ -94,6 +94,7 @@ class VoteCreateView(generics.CreateAPIView):
 
 #result
 class CalculateResultView(APIView):
+    permission_classes = [IsAuthenticatedWithJWT]
     def calculate_result(self):
         today = date.today()
 
