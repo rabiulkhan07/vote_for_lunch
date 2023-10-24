@@ -22,3 +22,14 @@ class Menu(models.Model):
         return self.restaurant.name
 
     
+#vote
+class Vote(models.Model):
+    date = models.DateField()
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    choice = models.PositiveSmallIntegerField(choices=[(0, 'No'), (1, 'Yes')])
+
+#Result
+class Result(models.Model):
+    date = models.DateField()
+    winner = models.ForeignKey(Restaurant, on_delete=models.CASCADE)

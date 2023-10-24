@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Restaurant,Menu
+from .models import Restaurant,Menu,Vote
 
 class RestaurantSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
@@ -22,3 +22,8 @@ class MenuSerializer(serializers.ModelSerializer):
         return obj.creator_name()
     def get_restaurent_name(self, obj):
         return obj.restaurent_name()
+
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = '__all__'

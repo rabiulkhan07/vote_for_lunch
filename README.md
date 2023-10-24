@@ -52,3 +52,9 @@ localhost:8000/api/menus/<int:pk>/delete/
 
 Menu Today
 localhost:8000/api/menus/today/
+
+Vote
+localhost:8000/api/votes/create/
+
+Result
+localhost:8000/api/get_result/
