@@ -1,10 +1,12 @@
 
 from rest_framework import generics
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,ListAPIView
 from rest_framework.exceptions import AuthenticationFailed
-from .models import Restaurant
-from .serializers import RestaurantSerializer
+from .models import Restaurant,Menu
+from .serializers import RestaurantSerializer,MenuSerializer
 import jwt
 from .permissions import IsAuthenticatedWithJWT
+from django.utils import timezone
 
 class RestaurantCreateView(generics.CreateAPIView):
     queryset = Restaurant.objects.all()
@@ -48,3 +50,34 @@ class RestaurantEditView(generics.UpdateAPIView):
 class RestaurantDeleteView(generics.DestroyAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+
+#Menu create
+class MenuCreateView(generics.CreateAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+
+#Fetch All
+class MenuListView(ListCreateAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+#fetch single 
+class MenuDetailView(generics.RetrieveAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+
+#Update
+class MenuUpdateView(RetrieveUpdateDestroyAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+
+#Today Menu
+class TodayMenuView(ListAPIView):
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
+    def get_queryset(self):
+        today = timezone.now().date()  # Get today's date
+        return Menu.objects.filter(date=today)
