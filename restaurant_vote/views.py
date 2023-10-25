@@ -26,7 +26,7 @@ class RestaurantCreateView(generics.CreateAPIView):
                 user_id = payload.get('id')
                 
                 # Set the user as the creator of the restaurant
-                serializer.save(created_by_id=user_id)
+                serializer.save(created_by_id=str(user_id))
             except jwt.ExpiredSignatureError:
                 raise AuthenticationFailed('Unauthenticated')
         else:
@@ -54,6 +54,7 @@ class RestaurantEditView(generics.UpdateAPIView):
 class RestaurantDeleteView(generics.DestroyAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
+    permission_classes = [IsAuthenticatedWithJWT]
 
 #Menu create
 class MenuCreateView(generics.CreateAPIView):

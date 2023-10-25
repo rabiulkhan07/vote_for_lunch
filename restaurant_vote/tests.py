@@ -66,27 +66,25 @@ class TestRestaurantAPI(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_create_vote(self):
-        # Create and authenticate a user
         token = self.create_and_login_user()
 
-        # Create a restaurant
+        # List restaurants
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        # Create a restaurant for testing
         response = self.client.post(self.restaurant_create_url, self.restaurant_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        
-
+        # Create a menu for the restaurant
         response = self.client.post(self.menu_create_url, self.menu_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Create a vote for the menu
         vote_data = {
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "restaurant": 1,  # Assuming the restaurant ID exists
-            "employee": 1,  # Assuming the user ID exists
+            "restaurant": 1,  # Ensure this matches the restaurant created above
+            "employee": 1,  # Provide a valid user ID
             "choice": 1  # 1 for "Yes"
         }
-
-        response = self.client.post(self.vote_create_url, vote_data)
+        response = self.client.post(self.vote_create_url, vote_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

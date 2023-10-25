@@ -8,9 +8,9 @@ ACTION      METHOD      URL
 --------------------------------------------------------
 Save        post        localhost:8000/api/register
 Get all     get         localhost:8000/api/employee 
-Get Single  get         localhost:8000/api/employee/id
-Update      put         localhost:8000/api/employee/id
-Delete      delete      localhost:8000/api/employee/id
+Get Single  get         localhost:8000/api/employee/uuid
+Update      put         localhost:8000/api/employee/uuid
+Delete      delete      localhost:8000/api/employee/uuid
 Login       post        localhost:8000/api/login
 Active user get         localhost:8000/api/activeuser
 Logout      post        localhost:8000/api/logout
@@ -24,13 +24,13 @@ Fetch Resturents
 localhost:8000/api/restaurants/
 
 Fetch single Resturent by id
-localhost:8000/api/restaurants/<int:pk>/
+localhost:8000/api/restaurants/<uuid:pk>/
 
 Update Resturent 
-localhost:8000/api/restaurants/<int:pk>/edit/
+localhost:8000/api/restaurants/<uuid:pk>/edit/
 
 Delete Resturent 
-localhost:8000/api/restaurants/<int:pk>/delete/
+localhost:8000/api/restaurants/<uuid:pk>/delete/
 
 
 Menu API :
@@ -42,13 +42,13 @@ All Menu Fetch
 localhost:8000/api/menus
 
 Single Menu Fetch
-localhost:8000/api/menus/<int:pk>/
+localhost:8000/api/menus/<uuid:pk>/
 
 Update Menu 
-localhost:8000/api/menus/<int:pk>/edit/
+localhost:8000/api/menus/<uuid:pk>/edit/
 
 Delete Menu 
-localhost:8000/api/menus/<int:pk>/delete/
+localhost:8000/api/menus/<uuid:pk>/delete/
 
 Menu Today
 localhost:8000/api/menus/today/

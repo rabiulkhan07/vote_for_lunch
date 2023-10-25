@@ -7,6 +7,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = ('id', 'name', 'created_by_name')
+        #fields = '__all__'
 
     def get_created_by_name(self, obj):
         return obj.creator_name()

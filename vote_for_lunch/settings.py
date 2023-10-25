@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'vote_for_lunch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'b_assessment',
+        'NAME': 'b_assessment_v1.2',
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',

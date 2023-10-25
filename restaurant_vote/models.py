@@ -1,8 +1,11 @@
 from django.db import models
 from employee.models import Employee
+import uuid
 
 # Create your models here.
+
 class Restaurant(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     created_by = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
@@ -10,6 +13,7 @@ class Restaurant(models.Model):
         return self.created_by.fullname
 
 class Menu(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,  editable=False)
     date = models.DateField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     created_by = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -24,6 +28,7 @@ class Menu(models.Model):
     
 #vote
 class Vote(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,  editable=False)
     date = models.DateField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -31,5 +36,6 @@ class Vote(models.Model):
 
 #Result
 class Result(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False)
     date = models.DateField()
     winner = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
