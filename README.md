@@ -1,8 +1,22 @@
 # vote_for_lunch
 
-run : pip3 install -r requirements.txt
+run : 
+1. pip3 install -r requirements.txt
+2. PostgreSQL should be installed on the machine.
+3. DB Settings :
+    DB NAME: b_assessment_v1.2,
+    USER : postgres,
+    PASSWORD : password,
+    HOST: 127.0.0.1,
+    PORT: 5432
+4. RUN - python3 manage.py makemigrations
+5. RUN - python3 manage.py migrate
 
-For Employee API :
+
+Employee Test  : python3 manage.py test employee
+Restaurent Vote Test : python3 manage.py test restaurant_vote
+
+Employee All API : 
 
 ACTION      METHOD      URL
 --------------------------------------------------------

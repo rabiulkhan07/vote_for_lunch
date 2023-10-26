@@ -25,7 +25,7 @@ class Menu(models.Model):
     def restaurent_name(self):
         return self.restaurant.name
 
-    
+     
 #vote
 class Vote(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,  editable=False)

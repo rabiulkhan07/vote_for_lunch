@@ -15,7 +15,7 @@ from django.db.models import Count
 class RestaurantCreateView(generics.CreateAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
-
+ 
     def perform_create(self, serializer):
         # Get the user from the JWT token stored in the cookie
         jwt_token = self.request.COOKIES.get('jwt')
@@ -99,7 +99,7 @@ class CalculateResultView(APIView):
     def calculate_result(self):
         today = date.today()
 
-        # Check the previous working days (e.g., last three days)
+        # Check the previous working days 
         previous_working_days = [today - timedelta(days=i) for i in range(1, 4)]
 
         # Get the restaurants that won on previous working days
